@@ -65,10 +65,20 @@ function applyReveal() {
             });
         }, { rootMargin: '0px 0px 60px 0px', threshold: 0 });
     }
-    els.forEach((el) => observer.observe(el));
+    // Anything already in (or near) the viewport shows immediately — no blank
+    // first section while waiting for the observer. Only below-fold animates on scroll.
+    const fold = window.innerHeight * 1.1;
+    els.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < fold && r.bottom > -60) {
+            el.classList.add(el.classList.contains('reveal') ? 'is-visible' : 'go');
+        } else {
+            observer.observe(el);
+        }
+    });
 
     clearTimeout(safetyTimer);
-    safetyTimer = setTimeout(revealAll, 1800);
+    safetyTimer = setTimeout(revealAll, 900);
 }
 
 /* ---------------- magnetic buttons ---------------- */
