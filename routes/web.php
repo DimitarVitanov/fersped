@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\CompanyPageController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SitemapController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // SEO endpoints
@@ -57,13 +56,8 @@ Route::prefix('admin')->group(function () {
     });
 });
 
-// Root -> best-match locale (Accept-Language aware, defaults to Macedonian).
-Route::get('/', function (Request $request) {
-    $preferred = $request->getPreferredLanguage(['mk', 'en']) ?? 'mk';
-    $locale = str_starts_with((string) $preferred, 'en') ? 'en' : 'mk';
-
-    return redirect("/{$locale}", 302);
-});
+// Root -> Macedonian always; English only via the language switcher (/en).
+Route::get('/', fn () => redirect('/mk', 302));
 
 // Localized site
 Route::prefix('{locale}')
