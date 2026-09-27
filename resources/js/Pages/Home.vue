@@ -20,6 +20,14 @@ const { t, localePath, locale } = useI18n();
 
 const ticker = computed(() => props.services.map((s) => s.title));
 
+// Notice cards that aren't already shown as news posts (e.g. the award card).
+const noticeCards = computed(() => {
+    const postTitles = props.posts.map((p) => p.title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ''));
+    return (props.home.notices?.items ?? []).filter(
+        (n) => !postTitles.some((t) => t.includes(n.title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '')) || n.title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '').includes(t)),
+    );
+});
+
 // mobile services carousel progress
 const rowEl = ref(null);
 const rowIdx = ref(0);
@@ -111,14 +119,16 @@ function onRow() {
             </div>
         </section>
 
-        <!-- ========================== NEWS ========================== -->
-        <section v-if="posts.length" class="band-light section border-b border-hair bg-bg">
+        <!-- ================= NEWS + NOTICES (one section) ================= -->
+        <section v-if="posts.length || home.notices" class="band-light section border-b border-hair bg-bg">
             <div class="container-page">
                 <div class="flex items-end justify-between gap-6">
-                    <SectionHeading :eyebrow="t('nav.news', 'Вести')" :title="home.notices?.title ?? 'Вести и информации'" max="max-w-xl" />
-                    <Link :href="localePath('news')" class="btn-outline hidden shrink-0 sm:inline-flex">{{ t('nav.news', 'Вести') }}<Icon name="arrowRight" :size="15" /></Link>
+                    <SectionHeading :eyebrow="home.notices?.eyebrow ?? t('nav.news', 'Вести')" :title="home.notices?.title ?? 'Вести и информации'" max="max-w-xl" />
+                    <Link v-if="posts.length" :href="localePath('news')" class="btn-outline hidden shrink-0 sm:inline-flex">{{ t('nav.news', 'Вести') }}<Icon name="arrowRight" :size="15" /></Link>
                 </div>
-                <div data-stagger class="mt-12 grid gap-5 md:grid-cols-3">
+
+                <!-- news posts -->
+                <div v-if="posts.length" data-stagger class="mt-12 grid gap-5" :class="posts.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'">
                     <Link
                         v-for="p in posts" :key="p.slug" :href="p.href"
                         class="group overflow-hidden rounded-2xl border border-hair bg-bg-2 transition-colors hover:border-brand-500/40"
@@ -133,16 +143,11 @@ function onRow() {
                         </div>
                     </Link>
                 </div>
-            </div>
-        </section>
 
-        <!-- ========================== NOTICES ========================== -->
-        <section v-if="home.notices" class="band-light section border-b border-hair bg-bg">
-            <div class="container-page">
-                <SectionHeading :eyebrow="home.notices.eyebrow" :title="home.notices.title" max="max-w-xl" />
-                <div data-stagger class="mt-12 grid gap-5 md:grid-cols-3">
+                <!-- standing notices (shareholders' assembly, contact) — skip any that duplicate a post -->
+                <div v-if="noticeCards.length" data-stagger class="mt-5 grid gap-5 md:grid-cols-2">
                     <Link
-                        v-for="(n, i) in home.notices.items"
+                        v-for="(n, i) in noticeCards"
                         :key="i"
                         :href="localePath(n.href)"
                         class="group flex flex-col rounded-2xl border border-hair bg-bg-2 p-7 transition-colors hover:border-brand-500/40"
