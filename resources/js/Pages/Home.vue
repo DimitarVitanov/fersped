@@ -48,15 +48,15 @@ function onRow() {
             <div class="absolute inset-0 bg-[radial-gradient(80%_60%_at_15%_80%,rgba(7,10,8,0.9),transparent_60%)]"></div>
             <div class="grid-dots absolute inset-0 opacity-40"></div>
 
-            <div class="container-page relative w-full pb-10 pt-36">
+            <div class="container-page relative w-full pb-8 pt-28 sm:pb-10 sm:pt-36">
                 <div class="stage">
                     <span class="eyebrow">{{ home.hero.badge }}</span>
                     <h1
                         data-split
-                        class="mt-6 max-w-[13ch] font-display text-[clamp(2.6rem,8.2vw,7.2rem)] font-extrabold uppercase leading-[0.95] tracking-[-0.03em] text-ink"
+                        class="mt-4 max-w-[13ch] font-display text-[clamp(2.4rem,8.2vw,7.2rem)] font-extrabold uppercase leading-[0.95] tracking-[-0.03em] text-ink sm:mt-6"
                     >{{ home.hero.title }}</h1>
-                    <p class="mt-7 max-w-xl text-base leading-relaxed text-body sm:text-lg">{{ home.hero.lead }}</p>
-                    <div class="mt-9 flex flex-wrap items-center gap-3">
+                    <p class="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-body sm:mt-7 sm:text-lg">{{ home.hero.lead }}</p>
+                    <div class="mt-6 flex flex-wrap items-center gap-3 sm:mt-9">
                         <Link :href="localePath('contact')" class="btn-primary" data-magnetic>
                             {{ home.hero.primary }}
                             <Icon name="arrowRight" :size="15" />
@@ -66,7 +66,7 @@ function onRow() {
                 </div>
 
                 <!-- meta row -->
-                <div class="mt-14 flex flex-wrap items-center gap-x-10 gap-y-3 border-t border-hair pt-5">
+                <div class="mt-8 flex flex-wrap items-center gap-x-10 gap-y-3 border-t border-hair pt-5 sm:mt-14">
                     <span class="mono-label">{{ locale === 'mk' ? 'Од 1968 · Скопје' : 'Est. 1968 · Skopje' }}</span>
                     <span class="mono-label hidden sm:inline">{{ locale === 'mk' ? '5 пристаништа · 4 вида транспорт' : '5 seaports · 4 modes' }}</span>
                     <span class="mono-label hidden md:inline">{{ locale === 'mk' ? 'AEO овластен · Берза: FERS' : 'AEO authorised · MSE : FERS' }}</span>
