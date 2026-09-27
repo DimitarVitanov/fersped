@@ -6,10 +6,10 @@ use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    public function test_root_redirects_to_locale_home(): void
+    public function test_root_always_redirects_to_macedonian(): void
     {
         $this->withHeaders(['Accept-Language' => 'mk'])->get('/')->assertRedirect('/mk');
-        $this->withHeaders(['Accept-Language' => 'en-US,en'])->get('/')->assertRedirect('/en');
+        $this->withHeaders(['Accept-Language' => 'en-US,en'])->get('/')->assertRedirect('/mk');
     }
 
     public function test_locale_homes_return_successful_response(): void
