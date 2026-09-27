@@ -1747,6 +1747,10 @@ var _sfc_main$10 = {
 		const props = __props;
 		const { t, localePath, locale } = useI18n();
 		const ticker = computed(() => props.services.map((s) => s.title));
+		const noticeCards = computed(() => {
+			const postTitles = props.posts.map((p) => p.title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ""));
+			return (props.home.notices?.items ?? []).filter((n) => !postTitles.some((t) => t.includes(n.title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "")) || n.title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "").includes(t)));
+		});
 		ref(null);
 		const rowIdx = ref(0);
 		return (_ctx, _push, _parent, _attrs) => {
@@ -1805,14 +1809,14 @@ var _sfc_main$10 = {
 				_push(`<!--]--></div>`);
 			}
 			_push(`</div></section>`);
-			if (__props.posts.length) {
+			if (__props.posts.length || __props.home.notices) {
 				_push(`<section class="band-light section border-b border-hair bg-bg"><div class="container-page"><div class="flex items-end justify-between gap-6">`);
 				_push(ssrRenderComponent(_sfc_main$30, {
-					eyebrow: unref(t)("nav.news", "Вести"),
+					eyebrow: __props.home.notices?.eyebrow ?? unref(t)("nav.news", "Вести"),
 					title: __props.home.notices?.title ?? "Вести и информации",
 					max: "max-w-xl"
 				}, null, _parent));
-				_push(ssrRenderComponent(_component_Link, {
+				if (__props.posts.length) _push(ssrRenderComponent(_component_Link, {
 					href: unref(localePath)("news"),
 					class: "btn-outline hidden shrink-0 sm:inline-flex"
 				}, {
@@ -1830,99 +1834,98 @@ var _sfc_main$10 = {
 					}),
 					_: 1
 				}, _parent));
-				_push(`</div><div data-stagger class="mt-12 grid gap-5 md:grid-cols-3"><!--[-->`);
-				ssrRenderList(__props.posts, (p) => {
-					_push(ssrRenderComponent(_component_Link, {
-						key: p.slug,
-						href: p.href,
-						class: "group overflow-hidden rounded-2xl border border-hair bg-bg-2 transition-colors hover:border-brand-500/40"
-					}, {
-						default: withCtx((_, _push, _parent, _scopeId) => {
-							if (_push) {
-								if (p.image) _push(`<div class="aspect-[16/8] overflow-hidden bg-deep-2"${_scopeId}><img${ssrRenderAttr("src", p.image)}${ssrRenderAttr("alt", p.title)} loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"${_scopeId}></div>`);
-								else _push(`<!---->`);
-								_push(`<div class="p-6"${_scopeId}>`);
-								if (p.date) _push(`<span class="mono-label"${_scopeId}>${ssrInterpolate(p.date)}</span>`);
-								else _push(`<!---->`);
-								_push(`<h3 class="mt-1.5 text-lg font-bold leading-snug text-ink transition-colors group-hover:text-brand-400"${_scopeId}>${ssrInterpolate(p.title)}</h3>`);
-								if (p.excerpt) _push(`<p class="mt-2 line-clamp-2 text-sm leading-relaxed text-body"${_scopeId}>${ssrInterpolate(p.excerpt)}</p>`);
-								else _push(`<!---->`);
-								_push(`</div>`);
-							} else return [p.image ? (openBlock(), createBlock("div", {
-								key: 0,
-								class: "aspect-[16/8] overflow-hidden bg-deep-2"
-							}, [createVNode("img", {
-								src: p.image,
-								alt: p.title,
-								loading: "lazy",
-								class: "h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-							}, null, 8, ["src", "alt"])])) : createCommentVNode("", true), createVNode("div", { class: "p-6" }, [
-								p.date ? (openBlock(), createBlock("span", {
+				else _push(`<!---->`);
+				_push(`</div>`);
+				if (__props.posts.length) {
+					_push(`<div data-stagger class="${ssrRenderClass([__props.posts.length >= 3 ? "md:grid-cols-3" : "md:grid-cols-2", "mt-12 grid gap-5"])}"><!--[-->`);
+					ssrRenderList(__props.posts, (p) => {
+						_push(ssrRenderComponent(_component_Link, {
+							key: p.slug,
+							href: p.href,
+							class: "group overflow-hidden rounded-2xl border border-hair bg-bg-2 transition-colors hover:border-brand-500/40"
+						}, {
+							default: withCtx((_, _push, _parent, _scopeId) => {
+								if (_push) {
+									if (p.image) _push(`<div class="aspect-[16/8] overflow-hidden bg-deep-2"${_scopeId}><img${ssrRenderAttr("src", p.image)}${ssrRenderAttr("alt", p.title)} loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"${_scopeId}></div>`);
+									else _push(`<!---->`);
+									_push(`<div class="p-6"${_scopeId}>`);
+									if (p.date) _push(`<span class="mono-label"${_scopeId}>${ssrInterpolate(p.date)}</span>`);
+									else _push(`<!---->`);
+									_push(`<h3 class="mt-1.5 text-lg font-bold leading-snug text-ink transition-colors group-hover:text-brand-400"${_scopeId}>${ssrInterpolate(p.title)}</h3>`);
+									if (p.excerpt) _push(`<p class="mt-2 line-clamp-2 text-sm leading-relaxed text-body"${_scopeId}>${ssrInterpolate(p.excerpt)}</p>`);
+									else _push(`<!---->`);
+									_push(`</div>`);
+								} else return [p.image ? (openBlock(), createBlock("div", {
 									key: 0,
-									class: "mono-label"
-								}, toDisplayString(p.date), 1)) : createCommentVNode("", true),
-								createVNode("h3", { class: "mt-1.5 text-lg font-bold leading-snug text-ink transition-colors group-hover:text-brand-400" }, toDisplayString(p.title), 1),
-								p.excerpt ? (openBlock(), createBlock("p", {
-									key: 1,
-									class: "mt-2 line-clamp-2 text-sm leading-relaxed text-body"
-								}, toDisplayString(p.excerpt), 1)) : createCommentVNode("", true)
-							])];
-						}),
-						_: 2
-					}, _parent));
-				});
-				_push(`<!--]--></div></div></section>`);
-			} else _push(`<!---->`);
-			if (__props.home.notices) {
-				_push(`<section class="band-light section border-b border-hair bg-bg"><div class="container-page">`);
-				_push(ssrRenderComponent(_sfc_main$30, {
-					eyebrow: __props.home.notices.eyebrow,
-					title: __props.home.notices.title,
-					max: "max-w-xl"
-				}, null, _parent));
-				_push(`<div data-stagger class="mt-12 grid gap-5 md:grid-cols-3"><!--[-->`);
-				ssrRenderList(__props.home.notices.items, (n, i) => {
-					_push(ssrRenderComponent(_component_Link, {
-						key: i,
-						href: unref(localePath)(n.href),
-						class: "group flex flex-col rounded-2xl border border-hair bg-bg-2 p-7 transition-colors hover:border-brand-500/40"
-					}, {
-						default: withCtx((_, _push, _parent, _scopeId) => {
-							if (_push) {
-								_push(`<span class="mono-label text-brand-500"${_scopeId}>${ssrInterpolate(n.kicker)}</span><h3 class="mt-4 text-xl font-bold leading-snug text-ink"${_scopeId}>${ssrInterpolate(n.title)}</h3><p class="mt-3 text-sm leading-relaxed text-body"${_scopeId}>${ssrInterpolate(n.text)}</p>`);
-								if (n.meta && n.meta.length) {
-									_push(`<ul class="mt-4 space-y-1.5 font-mono text-[0.78rem] tracking-[0.02em] text-body"${_scopeId}><!--[-->`);
-									ssrRenderList(n.meta, (m, j) => {
-										_push(`<li${_scopeId}>${ssrInterpolate(m)}</li>`);
-									});
-									_push(`<!--]--></ul>`);
-								} else _push(`<!---->`);
-								_push(`<span class="link-arrow mt-auto pt-6 transition-colors group-hover:text-brand-400"${_scopeId}>${ssrInterpolate(n.cta)} `);
-								_push(ssrRenderComponent(_sfc_main$32, {
-									name: "arrowRight",
-									size: 14
-								}, null, _parent, _scopeId));
-								_push(`</span>`);
-							} else return [
-								createVNode("span", { class: "mono-label text-brand-500" }, toDisplayString(n.kicker), 1),
-								createVNode("h3", { class: "mt-4 text-xl font-bold leading-snug text-ink" }, toDisplayString(n.title), 1),
-								createVNode("p", { class: "mt-3 text-sm leading-relaxed text-body" }, toDisplayString(n.text), 1),
-								n.meta && n.meta.length ? (openBlock(), createBlock("ul", {
-									key: 0,
-									class: "mt-4 space-y-1.5 font-mono text-[0.78rem] tracking-[0.02em] text-body"
-								}, [(openBlock(true), createBlock(Fragment, null, renderList(n.meta, (m, j) => {
-									return openBlock(), createBlock("li", { key: j }, toDisplayString(m), 1);
-								}), 128))])) : createCommentVNode("", true),
-								createVNode("span", { class: "link-arrow mt-auto pt-6 transition-colors group-hover:text-brand-400" }, [createTextVNode(toDisplayString(n.cta) + " ", 1), createVNode(_sfc_main$32, {
-									name: "arrowRight",
-									size: 14
-								})])
-							];
-						}),
-						_: 2
-					}, _parent));
-				});
-				_push(`<!--]--></div></div></section>`);
+									class: "aspect-[16/8] overflow-hidden bg-deep-2"
+								}, [createVNode("img", {
+									src: p.image,
+									alt: p.title,
+									loading: "lazy",
+									class: "h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+								}, null, 8, ["src", "alt"])])) : createCommentVNode("", true), createVNode("div", { class: "p-6" }, [
+									p.date ? (openBlock(), createBlock("span", {
+										key: 0,
+										class: "mono-label"
+									}, toDisplayString(p.date), 1)) : createCommentVNode("", true),
+									createVNode("h3", { class: "mt-1.5 text-lg font-bold leading-snug text-ink transition-colors group-hover:text-brand-400" }, toDisplayString(p.title), 1),
+									p.excerpt ? (openBlock(), createBlock("p", {
+										key: 1,
+										class: "mt-2 line-clamp-2 text-sm leading-relaxed text-body"
+									}, toDisplayString(p.excerpt), 1)) : createCommentVNode("", true)
+								])];
+							}),
+							_: 2
+						}, _parent));
+					});
+					_push(`<!--]--></div>`);
+				} else _push(`<!---->`);
+				if (noticeCards.value.length) {
+					_push(`<div data-stagger class="mt-5 grid gap-5 md:grid-cols-2"><!--[-->`);
+					ssrRenderList(noticeCards.value, (n, i) => {
+						_push(ssrRenderComponent(_component_Link, {
+							key: i,
+							href: unref(localePath)(n.href),
+							class: "group flex flex-col rounded-2xl border border-hair bg-bg-2 p-7 transition-colors hover:border-brand-500/40"
+						}, {
+							default: withCtx((_, _push, _parent, _scopeId) => {
+								if (_push) {
+									_push(`<span class="mono-label text-brand-500"${_scopeId}>${ssrInterpolate(n.kicker)}</span><h3 class="mt-4 text-xl font-bold leading-snug text-ink"${_scopeId}>${ssrInterpolate(n.title)}</h3><p class="mt-3 text-sm leading-relaxed text-body"${_scopeId}>${ssrInterpolate(n.text)}</p>`);
+									if (n.meta && n.meta.length) {
+										_push(`<ul class="mt-4 space-y-1.5 font-mono text-[0.78rem] tracking-[0.02em] text-body"${_scopeId}><!--[-->`);
+										ssrRenderList(n.meta, (m, j) => {
+											_push(`<li${_scopeId}>${ssrInterpolate(m)}</li>`);
+										});
+										_push(`<!--]--></ul>`);
+									} else _push(`<!---->`);
+									_push(`<span class="link-arrow mt-auto pt-6 transition-colors group-hover:text-brand-400"${_scopeId}>${ssrInterpolate(n.cta)} `);
+									_push(ssrRenderComponent(_sfc_main$32, {
+										name: "arrowRight",
+										size: 14
+									}, null, _parent, _scopeId));
+									_push(`</span>`);
+								} else return [
+									createVNode("span", { class: "mono-label text-brand-500" }, toDisplayString(n.kicker), 1),
+									createVNode("h3", { class: "mt-4 text-xl font-bold leading-snug text-ink" }, toDisplayString(n.title), 1),
+									createVNode("p", { class: "mt-3 text-sm leading-relaxed text-body" }, toDisplayString(n.text), 1),
+									n.meta && n.meta.length ? (openBlock(), createBlock("ul", {
+										key: 0,
+										class: "mt-4 space-y-1.5 font-mono text-[0.78rem] tracking-[0.02em] text-body"
+									}, [(openBlock(true), createBlock(Fragment, null, renderList(n.meta, (m, j) => {
+										return openBlock(), createBlock("li", { key: j }, toDisplayString(m), 1);
+									}), 128))])) : createCommentVNode("", true),
+									createVNode("span", { class: "link-arrow mt-auto pt-6 transition-colors group-hover:text-brand-400" }, [createTextVNode(toDisplayString(n.cta) + " ", 1), createVNode(_sfc_main$32, {
+										name: "arrowRight",
+										size: 14
+									})])
+								];
+							}),
+							_: 2
+						}, _parent));
+					});
+					_push(`<!--]--></div>`);
+				} else _push(`<!---->`);
+				_push(`</div></section>`);
 			} else _push(`<!---->`);
 			_push(`<section class="band-light section bg-bg"><div class="container-page"><div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">`);
 			_push(ssrRenderComponent(_sfc_main$30, {
@@ -3214,11 +3217,12 @@ var _sfc_main = {
 		function bindWipe() {
 			if (reduced() || window.matchMedia("(pointer: coarse)").matches) return;
 			removeStart = router.on("start", (e) => {
-				if (e.detail.visit.method !== "get") return;
+				if (e.detail.visit.method !== "get" || e.detail.visit.prefetch) return;
 				wipeEl.value?.classList.remove("leave");
 				wipeEl.value?.classList.add("cover");
 			});
-			removeFinish = router.on("finish", () => {
+			removeFinish = router.on("finish", (e) => {
+				if (e.detail.visit.prefetch) return;
 				const el = wipeEl.value;
 				if (!el || !el.classList.contains("cover")) return;
 				requestAnimationFrame(() => {

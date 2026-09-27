@@ -135,11 +135,13 @@ function bindWipe() {
     // Skip the wipe entirely on touch devices — instant page swaps feel faster.
     if (reduced() || window.matchMedia('(pointer: coarse)').matches) return;
     removeStart = router.on('start', (e) => {
-        if (e.detail.visit.method !== 'get') return;
+        // Background prefetches must never trigger the visual wipe.
+        if (e.detail.visit.method !== 'get' || e.detail.visit.prefetch) return;
         wipeEl.value?.classList.remove('leave');
         wipeEl.value?.classList.add('cover');
     });
-    removeFinish = router.on('finish', () => {
+    removeFinish = router.on('finish', (e) => {
+        if (e.detail.visit.prefetch) return;
         const el = wipeEl.value;
         if (!el || !el.classList.contains('cover')) return;
         requestAnimationFrame(() => {
