@@ -81,7 +81,7 @@
 }
 
 @layer base {
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--color-bg); }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--color-bg); overflow-x: clip; }
     body {
         @apply bg-bg text-body font-sans antialiased;
         text-rendering: optimizeLegibility;
@@ -416,7 +416,7 @@ html.js .wipe.leave {
 .prose-site ul { list-style: disc; }
 .prose-site ol { list-style: decimal; }
 .prose-site img { @apply my-6 h-auto max-w-full rounded-2xl border border-hair; float: none !important; }
-.prose-site table { @apply my-6 w-full border-collapse overflow-hidden rounded-xl text-sm; }
+.prose-site table { @apply my-6 w-full border-collapse rounded-xl text-sm; display: block; overflow-x: auto; }
 .prose-site th, .prose-site td { @apply border border-hair px-4 py-2.5 text-left align-top; }
 .prose-site th { @apply bg-bg-2 font-bold text-ink; }
 .prose-site hr { @apply my-8 border-hair; }

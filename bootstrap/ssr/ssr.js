@@ -2183,9 +2183,9 @@ var _sfc_main$9 = {
 				crumb: _ctx.$t("nav.investors"),
 				image: "/images/hero.webp"
 			}, null, _parent));
-			_push(`<section class="band-light section bg-bg"><div class="container-page"><dl class="grid grid-cols-2 gap-4 lg:grid-cols-3"><!--[-->`);
+			_push(`<section class="band-light section bg-bg"><div class="container-page"><dl class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"><!--[-->`);
 			ssrRenderList(__props.investors.facts, (f) => {
-				_push(`<div class="rounded-2xl border border-hair bg-bg-2 p-6"><dt class="mono-label">${ssrInterpolate(f.k)}</dt><dd class="mt-2 text-xl font-extrabold tracking-[-0.02em] text-ink sm:text-2xl">${ssrInterpolate(f.v)}</dd></div>`);
+				_push(`<div class="min-w-0 rounded-2xl border border-hair bg-bg-2 p-6"><dt class="mono-label">${ssrInterpolate(f.k)}</dt><dd class="mt-2 break-words text-xl font-extrabold tracking-[-0.02em] text-ink sm:text-2xl">${ssrInterpolate(f.v)}</dd></div>`);
 			});
 			_push(`<!--]--></dl><div class="mt-6 grid gap-5 sm:grid-cols-2"><!--[-->`);
 			ssrRenderList(__props.investors.blocks, (b, i) => {

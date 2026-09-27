@@ -28,10 +28,10 @@ function extOf(url) {
         <!-- Key facts -->
         <section class="band-light section bg-bg">
             <div class="container-page">
-                <dl class="grid grid-cols-2 gap-4 lg:grid-cols-3">
-                    <div v-for="f in investors.facts" :key="f.k" class="rounded-2xl border border-hair bg-bg-2 p-6">
+                <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    <div v-for="f in investors.facts" :key="f.k" class="min-w-0 rounded-2xl border border-hair bg-bg-2 p-6">
                         <dt class="mono-label">{{ f.k }}</dt>
-                        <dd class="mt-2 text-xl font-extrabold tracking-[-0.02em] text-ink sm:text-2xl">{{ f.v }}</dd>
+                        <dd class="mt-2 break-words text-xl font-extrabold tracking-[-0.02em] text-ink sm:text-2xl">{{ f.v }}</dd>
                     </div>
                 </dl>
 
