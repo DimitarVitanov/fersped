@@ -1,0 +1,13 @@
+{
+    "name": "FERŠPED AD Skopje",
+    "short_name": "FERŠPED",
+    "description": "Logistics, transport and freight forwarding since 1968.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#336c2b",
+    "icons": [
+        { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+        { "src": "/images/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+    ]
+}
